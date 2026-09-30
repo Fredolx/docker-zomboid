@@ -1,0 +1,23 @@
+[Unit]
+Description=Project Zomboid dedicated server
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+Image=ghcr.io/fredolx/docker-zomboid:stable
+ContainerName=zomboid
+AutoUpdate=registry
+EnvironmentFile=zomboid.env
+Volume=%h/zomboid:/data:Z
+PublishPort=16261:16261/udp
+PublishPort=16262:16262/udp
+PublishPort=27015:27015/tcp
+StopTimeout=120
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=1800
+TimeoutStopSec=150
+
+[Install]
+WantedBy=default.target
