@@ -17,9 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - branch: stable
-            steam_branch: public
+        branch: [public]
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -35,7 +33,7 @@ jobs:
         run: |
           buildid=$(docker run --rm docker.io/steamcmd/steamcmd:latest \
             +login anonymous +app_info_update 1 +app_info_print 380870 +quit \
-            | awk -F'"' -v b="${{ matrix.steam_branch }}" '
+            | awk -F'"' -v b="${{ matrix.branch }}" '
                 $2 == "branches" { s = 1 }
                 s && $2 == b && NF == 3 { f = 1 }
                 f && $2 == "buildid" && !p { print $4; p = 1 }')
@@ -78,7 +76,7 @@ jobs:
           context: .
           push: true
           provenance: false
-          build-args: STEAM_BRANCH=${{ matrix.steam_branch }}
+          build-args: STEAM_BRANCH=${{ matrix.branch }}
           labels: org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
           tags: |
             ${{ env.IMAGE }}:${{ matrix.branch }}

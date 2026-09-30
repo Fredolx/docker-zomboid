@@ -4,7 +4,7 @@ Wants=network-online.target
 After=network-online.target
 
 [Container]
-Image=ghcr.io/fredolx/docker-zomboid:stable
+Image=ghcr.io/fredolx/docker-zomboid:public
 ContainerName=zomboid
 AutoUpdate=registry
 EnvironmentFile=zomboid.env
